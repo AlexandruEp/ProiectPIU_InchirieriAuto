@@ -10,11 +10,14 @@ namespace InchirieriAuto
     {
         static void Main()
         {
-            string numeFisier = ConfigurationManager.AppSettings["NumeFisierClienti"];
+            string numeFisierClienti = ConfigurationManager.AppSettings["NumeFisierClienti"];
+            string numeFisierMasini = ConfigurationManager.AppSettings["NumeFisierMasini"];
             string locatieFisierSolutie = Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-            string caleCompletaFisier = locatieFisierSolutie + "\\" + numeFisier;
+            string caleCompletaFisierClienti = Path.Combine(locatieFisierSolutie,numeFisierClienti);
+            string caleCompletaFisierMasini = Path.Combine(locatieFisierSolutie, numeFisierMasini);
 
-            AdministrareClienti_FisierText adminClienti = new AdministrareClienti_FisierText(caleCompletaFisier);
+            AdministrareClienti_FisierText adminClienti = new AdministrareClienti_FisierText(caleCompletaFisierClienti);
+            AdministrareMasini_FisierText adminMasini = new AdministrareMasini_FisierText(caleCompletaFisierMasini);
 
             Client clientNou = new Client();
             Masina masinaNoua = new Masina();
@@ -25,48 +28,60 @@ namespace InchirieriAuto
 
             do
             {
-                Console.WriteLine("\nMENIU: ");
+                Console.WriteLine("\nMENIU: \n");
                 Console.WriteLine("C. Citire masina de la tastatura");
+                Console.WriteLine("A. Afisare masina");
+                Console.WriteLine("S. Salvare masina");
+                Console.WriteLine("W. Afisare masini salvate in fisier");
+                Console.WriteLine("E. Afisare date masina dupa model");
+
                 Console.WriteLine("D. Citire client de la tastatura");
-                Console.WriteLine("A. Afisare ultima masina introdusa");
-                Console.WriteLine("E. Afisare ultimul client introdus");
-                Console.WriteLine("W. Afisare date masina dupa model");
+                Console.WriteLine("I. Afisare client");
                 Console.WriteLine("Y. Afisare date client dupa nume");
-                Console.WriteLine("S. Salvare client in fisier");
-                Console.WriteLine("R. Citire toti clientii din fisier");
+                Console.WriteLine("P. Salvare client");
+                Console.WriteLine("R. Afisare clienti salvati");
+                
                 Console.WriteLine("X. Inchidere program");
                 Console.WriteLine();
 
                 Console.WriteLine("Alegeti o optiune: ");
                 opt = Console.ReadLine();
+                Console.Clear();
 
                 switch (opt.ToUpper())
                 {
                     case "C":
-                        masinaNoua = CitireMasinaTastatura();
-                        break;
-
-                    case "D":
-                        clientNou = CitireClientT();
-                        break;
-
-                    case "E":
-                        AfisareClient(clientNou);
+                        masinaNoua = CitireMasinaTastatura(adminMasini);
+                        Console.WriteLine();
                         break;
 
                     case "A":
-                        AfisareMasinaTastatura(masinaNoua);
+                        Console.WriteLine(AfisareMasina(masinaNoua));
+                        break;
+                    case "S":
+                        adminMasini.AddMasina(masinaNoua);
+                        Console.WriteLine("Masina salvata cu succes");
+                        break;
+                    case "W":
+                        AfisareMasiniFisier(adminMasini);
+                        break;
+                    case "E":
+                        IdentificareDupaModel(adminMasini);
+                        break;
+                    case "D":
+                        clientNou = CitireClientT();
+                        Console.WriteLine();
                         break;
 
-                    case "W":
-                        IdentificareDupaNume(masinaNoua);
+                    case "I":
+                        AfisareClient(clientNou);
                         break;
 
                     case "Y":
-                        IdentificareDupaNumeClient(clientNou);
+                        IdentificareDupaNume(adminClienti);
                         break;
 
-                    case "S":
+                    case "P":
                         adminClienti.AddClient(clientNou);
                         Console.WriteLine("Client salvat");
                         break;
@@ -90,13 +105,31 @@ namespace InchirieriAuto
 
         }
 
-        public static Masina CitireMasinaTastatura()
+        public static Masina CitireMasinaTastatura(AdministrareMasini_FisierText adminMasini)
         {
-            Console.WriteLine("Introduceti modelul: ");
-            string nume = Console.ReadLine();
+            Console.WriteLine("Alegeti modelul: ");
+            foreach (var model in Enum.GetValues(typeof(Model_masina)))
+            {
+                Console.WriteLine($"{(int)model}- {model}");
+            }
+            Model_masina modelMasina;
 
-            Console.WriteLine("Introduceti tipul combustibilului: ");
-            string combustibil = Console.ReadLine();
+            while (!Enum.TryParse(Console.ReadLine(), out modelMasina) || !Enum.IsDefined(typeof(Model_masina), modelMasina))
+            {
+                Console.WriteLine("Valoare invalida! Alegeti din lista:");
+            }
+
+
+            Console.WriteLine("Alegeti tipul combustibilului: ");
+            foreach (var combustibil in Enum.GetValues(typeof(Tip_combustibil)))
+            {
+                Console.WriteLine($"{(int)combustibil}- {combustibil}");
+            }
+            Tip_combustibil tip_Combustibil;
+            while (!Enum.TryParse(Console.ReadLine(), out tip_Combustibil) || !Enum.IsDefined(typeof(Tip_combustibil), tip_Combustibil))
+            {
+                Console.WriteLine("Valoare invalida! Alegeti din lista:");
+            }
 
             Console.WriteLine("Introduceti anul fabricatiei: ");
             int anFabricatie;
@@ -105,29 +138,71 @@ namespace InchirieriAuto
                 Console.WriteLine("Anul trebuie sa fie un numar! Introduceti din nou: ");
             }
 
-            return new Masina(nume, combustibil, anFabricatie);
-
-        }
-
-        public static void AfisareMasinaTastatura(Masina masina)
-        {
-            if (string.IsNullOrEmpty(masina.model))
+            Console.WriteLine("Alegeti culoarea: ");
+            foreach (var culoare in Enum.GetValues(typeof(Culoare_masina)))
             {
-                Console.WriteLine("Nu exista nicio masina introdusa!");
-                return;
+                Console.WriteLine($"{(int)culoare}- {culoare}");
             }
+            Culoare_masina culoareMasina;
+            while (!Enum.TryParse(Console.ReadLine(), out culoareMasina) || !Enum.IsDefined(typeof(Culoare_masina), culoareMasina))
+            {
+                Console.WriteLine("Valoare invalida! Alegeti din lista:");
+            }
+            int idNou = adminMasini.GetUltimulID();
 
-            Console.WriteLine($"Model: {masina.model}, Combustibil: {masina.tip_combustibil}, An: {masina.an_fabricatie}");
+            return new Masina()
+            {
+                IdMasina = idNou,
+                model = modelMasina,
+                combustibil = tip_Combustibil,
+                an_fabricatie = anFabricatie,
+                culoare = culoareMasina
+            };
         }
 
-        public static void IdentificareDupaNume(Masina masina)
+        public static string AfisareMasina(Masina masina)
         {
-            Console.WriteLine("Introduceti un model: ");
-            string model1 = Console.ReadLine();
+            string informatii_masina = string.Format("{0}. Masina {1}\n" +
+                "Motorizare: {2}\n" +
+                "Fabricata in {3}\n" +
+                "De culoare {4}",
+                masina.IdMasina,
+                masina.model.ToString(),
+                masina.combustibil.ToString(),
+                masina.an_fabricatie,
+                masina.culoare.ToString());
 
-            if (model1.Equals(masina.model))
+            return informatii_masina;
+        }
+
+        public static void AfisareMasiniFisier(AdministrareMasini_FisierText administrareMasini_FisierText)
+        {
+
+            Masina[] masini = administrareMasini_FisierText.GetMasini(out int nrMasini);
+            if (nrMasini == 0)
             {
-                Console.WriteLine($"Modelul {masina.model} functioneaza pe {masina.tip_combustibil}");
+                Console.WriteLine("Nu sunt masini salvate");
+            }
+            else
+            {
+                Console.WriteLine("\nMasinile salvate sunt: ");
+                for (int i = 0; i < nrMasini; i++)
+                {
+                    string infoMasina = AfisareMasina(masini[i]);
+                    Console.WriteLine(infoMasina);
+                }
+            } 
+        }
+        public static void IdentificareDupaModel(AdministrareMasini_FisierText adminMasini)
+        {
+            Console.WriteLine("Introduceti modelul");
+            string numeM = Console.ReadLine();
+            Masina masinaGasitNume = adminMasini.CautareDupaModel(numeM);
+            if (masinaGasitNume != null)
+            {
+                Console.WriteLine($"Masina: {masinaGasitNume.model},motorizare: {masinaGasitNume.combustibil}," +
+                    $"fabricata in {masinaGasitNume.an_fabricatie}, de culoare {masinaGasitNume.culoare}");
+                Console.WriteLine();
             }
             else
             {
@@ -170,14 +245,7 @@ namespace InchirieriAuto
 
         public static void AfisareClient(Client client)
         {
-           
-            string InfoClient = string.Format("Clientul cu id-ul #{0} are numele: {1}, adresa de mail: {2}, numarul de telefon: {3}, CNP: {4}",
-                client.IdClient,
-                client.nume ?? "NECUNOSCUT",
-                client.email ?? "NECUNOSCUT",
-                client.telefon ?? "NECUNOSCUT",
-                client.CNP ?? "NECUNOSCUT");
-            Console.WriteLine(InfoClient);
+            Console.WriteLine(client.Info());
         }
         public static void AfisareClienti(Client[] clienti)
         {
@@ -189,20 +257,20 @@ namespace InchirieriAuto
                 }
             }
         }
-        public static void IdentificareDupaNumeClient(Client client)
+        public static void IdentificareDupaNume(AdministrareClienti_FisierText adminClient)
         {
-            Console.WriteLine("Introduceti un nume: ");
-            string nume = Console.ReadLine();
-
-            if (client.nume.Contains(nume))
+            Console.WriteLine("Introduceti numele");
+            string numeC = Console.ReadLine();
+            Client clientGasitNume = adminClient.CautareDupaNume(numeC);
+            if (clientGasitNume != null)
             {
-                Console.WriteLine($"Persoana {client.nume} are numarul de telefon: {client.telefon} si adresa de mail: {client.email}");
+                Console.WriteLine($"Clientul {clientGasitNume.nume} are numarul de telefon {clientGasitNume.telefon}");
             }
             else
             {
                 Console.WriteLine("Numele introdus nu corespunde");
-
             }
         }
+    
     }
 }

@@ -23,13 +23,11 @@ namespace LibrarieModele
         public string email { get; set; }
         public string CNP { get; set; }
         public string telefon { get; set; }
+        
 
         public Client()
         {
-           nume = string.Empty;
-           email = string.Empty;
-           CNP = string.Empty;
-           telefon = string.Empty;
+            nume = email = CNP = telefon = string.Empty;
         }
 
         public Client(string _nume, string _email, string _CNP, string _telefon)
@@ -46,11 +44,13 @@ namespace LibrarieModele
                this.nume = dateFisier[NUME];
                this.email = dateFisier[EMAIL];
                this.telefon = dateFisier[TELEFON];
-               this.CNP = dateFisier[CNP_];      
+               this.CNP = dateFisier[CNP_];
+        
         }
         public string Info()
         {
-            return $"CLient: {nume}\n" +
+            return $"CLientul cu id-ul: {IdClient}" +
+                $"Nume: {nume}\n" +
                 $"Email: {email}\n" +
                 $"Numar telefon: {telefon}\n"+
                 $"CNP:{CNP}";

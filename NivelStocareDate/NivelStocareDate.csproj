@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdministareMasini_Memorie.cs" />
     <Compile Include="AdministrareClienti_FisierText.cs" />
     <Compile Include="AdministrareClienti_Memorie.cs" />
+    <Compile Include="AdministrareMasini_FisierText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,31 +9,59 @@ namespace LibrarieModele
    public class Masina
     {
  
-           public string model { get; set; }
-           public string tip_combustibil { get; set; }
+           public int IdMasina { get; set; }
+           public Model_masina model { get; set; }
+           public Tip_combustibil combustibil { get; set; }
            public int an_fabricatie { get; set; }
+           public Culoare_masina culoare { get; set; }
 
-            public Masina()
-            {
-                model = string.Empty;
-                tip_combustibil = string.Empty;
-                an_fabricatie = 0;
-            }
+            private const char SEPARATOR_PRINCIPAL_FISIER = ';';
+            private const int ID = 0;
+            private const int MODEL = 1;
+            private const int COMBUSTIBIL = 2;
+            private const int AN_FABRICATIE = 3;
+            private const int CULOARE = 4;
 
-            public Masina(string _model, string _tip_combustibil, int _an_fabricatie)
-            {
-                model = _model;
-                tip_combustibil = _tip_combustibil;
-                an_fabricatie = _an_fabricatie;
-            }
+        public Masina()
+        {
+            IdMasina = 0;
+            model = Model_masina.None;
+            combustibil = Tip_combustibil.None;
+            an_fabricatie = 0;
+            culoare = Culoare_masina.None;
+        }
+
+        public Masina(Model_masina model, Tip_combustibil tip_combustibil, int an_fabricatie, Culoare_masina culoare)
+        {
+            this.model = model;
+            this.combustibil = tip_combustibil;
+            this.an_fabricatie = an_fabricatie;
+            this.culoare = culoare;
+        }
+        public Masina(string liniefisier)
+        {
+            string[] dateFisier = liniefisier.Split(SEPARATOR_PRINCIPAL_FISIER);
+            this.IdMasina = Convert.ToInt32(dateFisier[ID]);
+            this.model = (Model_masina)Enum.Parse(typeof(Model_masina), dateFisier[MODEL]);
+            this.combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), dateFisier[COMBUSTIBIL]);
+            this.an_fabricatie = Convert.ToInt32(dateFisier[AN_FABRICATIE]);
+            this.culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), dateFisier[CULOARE]);
+        }
 
             public string Info()
             {
-                return $"Model: {model}\n" +
-                    $"Motorizare: {tip_combustibil}\n" +
-                    $"An fabricatie: {an_fabricatie}";
-
+                return $"ID: {IdMasina}\n"+
+                    $"Model: {model}\n" +
+                    $"Motorizare: {combustibil}\n" +
+                    $"An fabricatie: {an_fabricatie}\n" +
+                    $"Culoare: {culoare}";
             }
+        public string ConversieLaSir()
+        {
+            string masinaPentruFisier = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}",
+                SEPARATOR_PRINCIPAL_FISIER, IdMasina, model, combustibil, an_fabricatie, culoare);
+            return masinaPentruFisier;
+        }
     }
 }
 

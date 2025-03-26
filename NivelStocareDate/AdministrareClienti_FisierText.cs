@@ -42,8 +42,8 @@ namespace NivelStocareDate
                        
                         string nume = dateClient[1];
                         string email = dateClient[2];
-                        string CNP = dateClient[3];
-                        string telefon = dateClient[4];
+                        string telefon = dateClient[3];
+                        string CNP = dateClient[4];
 
                         clienti[nrClienti++] = new Client(nume, email, CNP, telefon);
                     }
@@ -55,6 +55,18 @@ namespace NivelStocareDate
                 }
             }
             return clienti;
+        }
+        public Client CautareDupaNume(string nume)
+        {
+            Client[] clienti = GetClienti(out int nrClienti);
+            for (int i = 0; i < nrClienti; i++)
+            {
+                if (clienti[i].nume.Equals(nume))
+                {
+                    return clienti[i];
+                }
+            }
+            return null;
         }
     }
 }
