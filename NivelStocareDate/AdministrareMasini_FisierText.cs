@@ -78,7 +78,6 @@ namespace NivelStocareDate
             return null;
         }
 
-
         public int GetUltimulID()
         {
             int lastID = 0;

@@ -49,7 +49,7 @@ namespace LibrarieModele
         }
         public string Info()
         {
-            return $"CLientul cu id-ul: {IdClient}" +
+            return $"CLientul cu id-ul: {IdClient}\n" +
                 $"Nume: {nume}\n" +
                 $"Email: {email}\n" +
                 $"Numar telefon: {telefon}\n"+

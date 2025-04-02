@@ -1,2 +1,3 @@
 1;BMW;Diesel;2020;neagra
 2;Ford;Hibrid;1999;gri
+3;BMW;Diesel;2010;neagra

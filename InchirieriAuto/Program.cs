@@ -254,6 +254,7 @@ namespace InchirieriAuto
                 if (client != null)
                 {
                     AfisareClient(client);
+                    Console.WriteLine();
                 }
             }
         }

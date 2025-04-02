@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InchirieriAuto", "InchirieriAuto\InchirieriAuto.csproj", "{B4A50096-F855-4723-84CB-622EE55BD121}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibrarieModele", "LibrarieModele\LibrarieModele.csproj", "{952D1401-9A30-423A-9FE9-05A50D6C175B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NivelStocareDate", "NivelStocareDate\NivelStocareDate.csproj", "{7968573C-2F2B-47BF-B35E-CB2794EB70B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfataUtilizator_WindowsForms", "InterfataUtilizator_WindowsForms\InterfataUtilizator_WindowsForms.csproj", "{14A556C4-F65D-4273-AD85-89549FE292B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7968573C-2F2B-47BF-B35E-CB2794EB70B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7968573C-2F2B-47BF-B35E-CB2794EB70B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7968573C-2F2B-47BF-B35E-CB2794EB70B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A556C4-F65D-4273-AD85-89549FE292B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A556C4-F65D-4273-AD85-89549FE292B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A556C4-F65D-4273-AD85-89549FE292B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A556C4-F65D-4273-AD85-89549FE292B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
