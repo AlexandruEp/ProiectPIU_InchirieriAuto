@@ -1,6 +1,7 @@
-﻿using System;
+﻿using LibrarieModele;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using LibrarieModele;
 
 namespace NivelStocareDate
 {
@@ -26,31 +27,32 @@ namespace NivelStocareDate
             }
         }
 
-        public Client[] GetClienti(out int nrClienti)
+        public List<Client> GetClienti()
         {
-            Client[] clienti = new Client[NR_MAX_CLIENTI];
+            var clienti = new List<Client>();
             using (StreamReader streamReader = new StreamReader(numeFisier))
             {
                 string linieFisier;
-                nrClienti = 0;
+
 
                 while ((linieFisier = streamReader.ReadLine()) != null)
                 {
+                    linieFisier = linieFisier.Trim();
+                    if (string.IsNullOrWhiteSpace(linieFisier))
+                    {
+                        continue;
+                    }
                     string[] dateClient = linieFisier.Split(';');
                     if (dateClient.Length >= 5)
                     {
-                       
+                        // Updated line in GetClienti method
+                        int idClient = int.Parse(dateClient[0]); // Convert the string to an integer
                         string nume = dateClient[1];
                         string email = dateClient[2];
                         string telefon = dateClient[3];
                         string CNP = dateClient[4];
 
-                        clienti[nrClienti++] = new Client(nume, email, CNP, telefon);
-                    }
-                    else
-                    {
-                        // Handle the case where the line does not have enough fields
-                        Console.WriteLine($"Invalid line format: {linieFisier}");
+                        clienti.Add(new Client(idClient, nume, email, CNP, telefon));
                     }
                 }
             }
@@ -58,12 +60,12 @@ namespace NivelStocareDate
         }
         public Client CautareDupaNume(string nume)
         {
-            Client[] clienti = GetClienti(out int nrClienti);
-            for (int i = 0; i < nrClienti; i++)
+            List<Client> clienti = GetClienti();
+            foreach (var client in clienti)
             {
-                if (clienti[i].nume.Equals(nume))
+                if (!string.IsNullOrEmpty(client.nume) && client.nume.Equals(nume, StringComparison.OrdinalIgnoreCase))
                 {
-                    return clienti[i];
+                    return client;
                 }
             }
             return null;

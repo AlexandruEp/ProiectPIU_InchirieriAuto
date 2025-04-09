@@ -30,8 +30,9 @@ namespace LibrarieModele
             nume = email = CNP = telefon = string.Empty;
         }
 
-        public Client(string _nume, string _email, string _CNP, string _telefon)
+        public Client(int _idclient, string _nume, string _email, string _CNP, string _telefon)
         {
+            IdClient = _idclient;
             nume = _nume;
             email = _email;
             CNP = _CNP;
@@ -53,7 +54,7 @@ namespace LibrarieModele
                 $"Nume: {nume}\n" +
                 $"Email: {email}\n" +
                 $"Numar telefon: {telefon}\n"+
-                $"CNP:{CNP}";
+                $"CNP:{CNP}\n";
 
         }
         public string ConversieLaSir()
@@ -66,6 +67,10 @@ namespace LibrarieModele
                 (telefon ?? "NECUNOSCUT"),
                 (CNP ?? "NECUNOSCUT"));
             return obiectClientPentruFisier;
+        }
+        public void SetID(int id)
+        {
+            this.IdClient = id;
         }
     }
 }

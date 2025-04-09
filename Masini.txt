@@ -1,3 +1,4 @@
-1;BMW;Diesel;2020;neagra
-2;Ford;Hibrid;1999;gri
-3;BMW;Diesel;2010;neagra
+1;BMW;Benzina;2001;neagra
+2;Ford;Electric;2015;gri
+3;Mercedes;Benzina;2010;rosie
+4;Ford;Hibrid;2011;albastra

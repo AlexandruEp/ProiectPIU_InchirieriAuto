@@ -24,15 +24,16 @@ namespace LibrarieModele
 
         public Masina()
         {
-            IdMasina = 0;
+            
             model = Model_masina.None;
             combustibil = Tip_combustibil.None;
             an_fabricatie = 0;
             culoare = Culoare_masina.None;
         }
 
-        public Masina(Model_masina model, Tip_combustibil tip_combustibil, int an_fabricatie, Culoare_masina culoare)
+        public Masina(int _idMasina, Model_masina model, Tip_combustibil tip_combustibil, int an_fabricatie, Culoare_masina culoare)
         {
+            IdMasina = _idMasina;
             this.model = model;
             this.combustibil = tip_combustibil;
             this.an_fabricatie = an_fabricatie;
@@ -61,6 +62,11 @@ namespace LibrarieModele
             string masinaPentruFisier = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}",
                 SEPARATOR_PRINCIPAL_FISIER, IdMasina, model, combustibil, an_fabricatie, culoare);
             return masinaPentruFisier;
+        }
+
+        public void SetID(int id)
+        {
+            IdMasina = id;
         }
     }
 }

@@ -22,79 +22,77 @@ namespace NivelStocareDate
         }
         public void AddMasina(Masina masina)
         {
-            int idNou = GetUltimulID()+1;
+            int idNou = GetUltimulID() + 1;
             masina.IdMasina = idNou;
-            // Deschidem fișierul în modul 'append' pentru a adăuga masini noi
-            using (StreamWriter streamWriterFisierText = new StreamWriter(numeFisier, true))
+
+            using (StreamWriter streamWriter = new StreamWriter(numeFisier, true))
             {
-                streamWriterFisierText.WriteLine(masina.ConversieLaSir());
+                streamWriter.WriteLine(masina.ConversieLaSir());
             }
         }
-        public Masina[] GetMasini(out int nrMasini)
+        public List<Masina> GetMasini()
         {
-            Masina[] masini = new Masina[NR_MAX_MASINI];
+            List<Masina> masini = new List<Masina>();
+
             using (StreamReader streamReader = new StreamReader(numeFisier))
             {
                 string linieFisier;
-                nrMasini = 0;
-                int lastid = GetUltimulID();
+
                 while ((linieFisier = streamReader.ReadLine()) != null)
                 {
+                    linieFisier = linieFisier.Trim();
+                    if (string.IsNullOrWhiteSpace(linieFisier)) continue;
+
                     string[] dateMasina = linieFisier.Split(';');
                     if (dateMasina.Length >= 5)
                     {
-                        Model_masina model = (Model_masina)Enum.Parse(typeof(Model_masina), dateMasina[1]);
-                        Tip_combustibil combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), dateMasina[2]);
-                        int an_fabricatie = Convert.ToInt32(dateMasina[3]);
-                        Culoare_masina culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), dateMasina[4]);
-
-                        masini[nrMasini++] = new Masina(model, combustibil, an_fabricatie, culoare)
+                        try
                         {
-                            IdMasina = ++lastid
-                        };
+                            int id = Convert.ToInt32(dateMasina[0]);
+                            Model_masina model = (Model_masina)Enum.Parse(typeof(Model_masina), dateMasina[1]);
+                            Tip_combustibil combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), dateMasina[2]);
+                            int an_fabricatie = Convert.ToInt32(dateMasina[3]);
+                            Culoare_masina culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), dateMasina[4]);
+
+                            Masina masina = new Masina(id, model, combustibil, an_fabricatie, culoare);
+                            masina.IdMasina = id;
+
+                            masini.Add(masina);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Eroare la parsarea liniei: {linieFisier}\n{ex.Message}");
+                        }
                     }
                     else
                     {
-                        // Handle the case where the line is not properly formatted
-                        Console.WriteLine($"Invalid line format: {linieFisier}");
+                        Console.WriteLine($"Linie invalidă: {linieFisier}");
                     }
                 }
             }
 
             return masini;
         }
+        public int GetUltimulID()
+        {
+            List<Masina> masini = GetMasini();
+            return masini.Count > 0 ? masini.Max(m => m.IdMasina) : 0;
+        }
         public Masina CautareDupaModel(string nume)
         {
-            Masina[] masini = GetMasini(out int nrMasini);
+            List<Masina> masini = GetMasini();
 
-            for (int i = 0; i < nrMasini; i++)
+            foreach (var masina in masini)
             {
-                if (masini[i].model.ToString().Equals(nume))
+                if (masina.model.ToString().Equals(nume, StringComparison.OrdinalIgnoreCase))
                 {
-
-                    return masini[i];
+                    return masina;
                 }
             }
             return null;
         }
 
-        public int GetUltimulID()
-        {
-            int lastID = 0;
-            using (StreamReader streamReader = new StreamReader(numeFisier))
-            {
-                string linieFisier;
-                while ((linieFisier = streamReader.ReadLine()) != null)
-                {
-                    string[] dateMasina = linieFisier.Split(';');
-                    if (dateMasina.Length > 0 && int.TryParse(dateMasina[0], out int id))
-                    {
-                        lastID = id;
-                    }
-                }
-            }
-            return lastID;
-        }
+
 
 
 

@@ -3,6 +3,8 @@ using System.Configuration;
 using LibrarieModele;
 using NivelStocareDate;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InchirieriAuto
 {
@@ -21,9 +23,9 @@ namespace InchirieriAuto
 
             Client clientNou = new Client();
             Masina masinaNoua = new Masina();
-            int nrClienti = 0;
-
-            adminClienti.GetClienti(out nrClienti);
+           
+            List<Client> Clienti = adminClienti.GetClienti();
+            int nrClienti = Clienti.Count;
             string opt;
 
             do
@@ -69,7 +71,8 @@ namespace InchirieriAuto
                         IdentificareDupaModel(adminMasini);
                         break;
                     case "D":
-                        clientNou = CitireClientT();
+                        clientNou = CitireClientT(adminClienti);
+                       
                         Console.WriteLine();
                         break;
 
@@ -88,7 +91,7 @@ namespace InchirieriAuto
 
                     case "R":
 
-                        Client[] clienti = adminClienti.GetClienti(out nrClienti);
+                        List<Client> clienti = adminClienti.GetClienti();
                         AfisareClienti(clienti);
                         break;
 
@@ -119,7 +122,6 @@ namespace InchirieriAuto
                 Console.WriteLine("Valoare invalida! Alegeti din lista:");
             }
 
-
             Console.WriteLine("Alegeti tipul combustibilului: ");
             foreach (var combustibil in Enum.GetValues(typeof(Tip_combustibil)))
             {
@@ -148,7 +150,12 @@ namespace InchirieriAuto
             {
                 Console.WriteLine("Valoare invalida! Alegeti din lista:");
             }
-            int idNou = adminMasini.GetUltimulID();
+
+            // Generate a new ID for the car
+            List<Masina> masiniExistente = adminMasini.GetMasini();
+            int idNou = masiniExistente.Count > 0
+                ? masiniExistente.Max(m => m.IdMasina) + 1
+                : 1;
 
             return new Masina()
             {
@@ -177,8 +184,8 @@ namespace InchirieriAuto
 
         public static void AfisareMasiniFisier(AdministrareMasini_FisierText administrareMasini_FisierText)
         {
-
-            Masina[] masini = administrareMasini_FisierText.GetMasini(out int nrMasini);
+            List<Masina> masini = administrareMasini_FisierText.GetMasini();
+            int nrMasini = masini.Count; // Added this line to define nrMasini
             if (nrMasini == 0)
             {
                 Console.WriteLine("Nu sunt masini salvate");
@@ -191,7 +198,7 @@ namespace InchirieriAuto
                     string infoMasina = AfisareMasina(masini[i]);
                     Console.WriteLine(infoMasina);
                 }
-            } 
+            }
         }
         public static void IdentificareDupaModel(AdministrareMasini_FisierText adminMasini)
         {
@@ -209,17 +216,15 @@ namespace InchirieriAuto
                 Console.WriteLine("Modelul introdus nu corespunde");
             }
         }
-        public static Client CitireClientT()
+        public static Client CitireClientT(AdministrareClienti_FisierText adminClienti)
         {
             Console.WriteLine("Introduceti numele: ");
             string nume = Console.ReadLine();
             Console.WriteLine();
 
-
             Console.WriteLine("Introduceti email-ul: ");
             string email = Console.ReadLine();
             Console.WriteLine();
-
 
             Console.WriteLine("Introduceti numarul de telefon: ");
             string telefon = Console.ReadLine();
@@ -236,18 +241,36 @@ namespace InchirieriAuto
             {
                 Console.WriteLine("CNP invalid. Reintroduceti: ");
                 CNP = Console.ReadLine();
-
             }
             Console.WriteLine();
 
-            return new Client(nume, email, CNP, telefon);
+            // 2. Obții lista de clienți existenți
+            List<Client> clientiExistenti = adminClienti.GetClienti();
+
+            // 3. Calculezi următorul ID disponibil
+            int idNou = clientiExistenti.Count > 0
+                ? clientiExistenti.Max(c => c.IdClient) + 1
+                : 1;
+
+            // 4. Creezi un nou client cu ID-ul calculat
+            Client clientNou = new Client
+            {
+                IdClient = idNou,
+                nume = nume,
+                email = email,
+                CNP = CNP,
+                telefon = telefon
+            };
+
+            // 5. Returnezi clientul complet
+            return clientNou;
         }
 
         public static void AfisareClient(Client client)
         {
             Console.WriteLine(client.Info());
         }
-        public static void AfisareClienti(Client[] clienti)
+        public static void AfisareClienti(List<Client> clienti)
         {
             foreach (var client in clienti)
             {
