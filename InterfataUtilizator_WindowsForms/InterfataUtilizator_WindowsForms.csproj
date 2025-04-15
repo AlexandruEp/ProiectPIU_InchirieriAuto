@@ -47,7 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AdaugareClienti.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdaugareClienti.Designer.cs">
+      <DependentUpon>AdaugareClienti.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VizualizareClienti.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
