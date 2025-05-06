@@ -65,7 +65,6 @@ public partial class VizualizareClienti : Form
         BtnBack = new Button()
         {
             Text = "Înapoi",
-            Location = new Point(250, 200),
             Width = 200,
             Height = 35,
             BackColor = Color.MediumAquamarine,
@@ -74,6 +73,9 @@ public partial class VizualizareClienti : Form
         };
         BtnBack.Click += BtnBack_Click;
         this.Controls.Add(BtnBack);
+
+        BtnBack.Location = new Point((this.ClientSize.Width - BtnBack.Width) / 2, dataGridViewClienti.Bottom + 30);
+        BtnBack.Anchor = AnchorStyles.Top;
          
 
     }
@@ -87,6 +89,12 @@ public partial class VizualizareClienti : Form
             .ToList();
 
         dataGridViewClienti.DataSource = clientiValizi;
+
+        dataGridViewClienti.Columns["IdClient"].HeaderText = "ID";
+        dataGridViewClienti.Columns["nume"].HeaderText = "Nume";
+        dataGridViewClienti.Columns["email"].HeaderText = "Email";
+        dataGridViewClienti.Columns["telefon"].HeaderText = "Telefon";
+
     }
 
     private void AjusteazaInaltimeGrid()

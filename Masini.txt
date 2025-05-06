@@ -2,3 +2,5 @@
 2;Ford;Electric;2015;gri
 3;Mercedes;Benzina;2010;rosie
 4;Ford;Hibrid;2011;albastra
+5;Mercedes;Electric;2012;gri
+6;Opel;Hibrid;2010;alba
