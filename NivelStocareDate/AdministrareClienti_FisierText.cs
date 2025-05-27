@@ -51,8 +51,9 @@ namespace NivelStocareDate
                         string email = dateClient[2];
                         string telefon = dateClient[3];
                         string CNP = dateClient[4];
+                        string parola = dateClient.Length > 5 ? dateClient[5] : "parola123"; // parola default pentru compatibilitate
 
-                        clienti.Add(new Client(idClient, nume, email, CNP, telefon));
+                        clienti.Add(new Client(idClient, nume, email, CNP, telefon, parola));
                     }
                 }
             }
@@ -70,6 +71,17 @@ namespace NivelStocareDate
             }
             return null;
         }
+        public void SalveazaClienti(List<Client> listaClienti)
+        {
+            using (StreamWriter writer = new StreamWriter(numeFisier, false)) // false = rescrie complet fișierul
+            {
+                foreach (var client in listaClienti)
+                {
+                    writer.WriteLine(client.ConversieLaSir());
+                }
+            }
+        }
+
     }
 }
 

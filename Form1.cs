@@ -7,6 +7,7 @@ namespace InterfataUtilizator_WindowsForms
         public Form1()
         {
             InitializeComponent();
+            this.BackColor = ColorTranslator.FromHtml("#e3f2fd");
             lblClientInfo = new Label(); // Initialize the label
             lblClientInfo.Location = new Point(10, 10); // Set the location of the label
             lblClientInfo.Size = new Size(300, 100); // Set the size of the label
@@ -29,7 +30,7 @@ namespace InterfataUtilizator_WindowsForms
             {
                 Client ultimulClient = clienti[nrClienti - 1];
 
-                // Asigurã-te cã ai un Label pe Form cu numele "lblClientInfo"
+                // Asigurï¿½-te cï¿½ ai un Label pe Form cu numele "lblClientInfo"
                 lblClientInfo.Text = $"Nume: {ultimulClient.nume}\n" +
                                      $"Email: {ultimulClient.email}\n" +
                                      $"Telefon: {ultimulClient.telefon}\n" +
@@ -37,7 +38,7 @@ namespace InterfataUtilizator_WindowsForms
             }
             else
             {
-                lblClientInfo.Text = "Nu existã clien?i înregistra?i.";
+                lblClientInfo.Text = "Nu existï¿½ clien?i ï¿½nregistra?i.";
             }
         }
     }

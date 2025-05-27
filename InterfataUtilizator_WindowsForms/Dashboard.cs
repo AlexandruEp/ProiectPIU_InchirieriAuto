@@ -4,93 +4,85 @@ using System.Windows.Forms;
 
 namespace InterfataUtilizator_WindowsForms
 {
-    public partial class Dashboard : Form
+    public class Dashboard : Form
     {
-        private Button btnAdaugaClient;
         private Button btnVizualizareClienti;
         private Button btnAdaugaMasina;
         private Button btnVizualizareMasini;
+        private Button btnIstoricInchirieri;
+        private Button btnLogout;
 
         public Dashboard()
         {
-            InitializeComponent();
             InitializeDashboard();
         }
 
         private void InitializeDashboard()
         {
-            this.Text = "Dashboard - Închirieri Mașini";
+            this.Text = "Dashboard - Admin";
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.ClientSize = new Size(400, 450);
-            this.BackColor = Color.White;
+            this.ClientSize = new Size(400, 600);
+            this.BackColor = ColorTranslator.FromHtml("#e3f2fd");
 
-            // Creează un TableLayoutPanel pentru centrare
+            // Layout principal
             TableLayoutPanel table = new TableLayoutPanel
             {
-                RowCount = 4,
+                RowCount = 5,
                 ColumnCount = 1,
                 Dock = DockStyle.Fill,
-                Padding = new Padding(0, 30, 0, 30)
+                Padding = new Padding(0, 50, 0, 30)
             };
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
-                table.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
+                table.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             }
 
-            // Inițializare butoane
-            btnAdaugaClient = CreateStyledButton("Adaugă Client", Color.MediumSeaGreen, BtnAdaugaClient_Click);
-            btnVizualizareClienti = CreateStyledButton("Vizualizează Clienți", Color.SteelBlue, BtnVizualizareClienti_Click);
-            btnAdaugaMasina = CreateStyledButton("Adaugă Mașină", Color.Coral, BtnAdaugaMasina_Click);
-            btnVizualizareMasini = CreateStyledButton("Vizualizează Mașini", Color.CadetBlue, BtnVizualizareMasini_Click);
+            // Butoane
+            btnVizualizareClienti = CreateStyledButton("Vizualizează Clienți", Color.FromArgb(41, 128, 185), BtnVizualizareClienti_Click);
+            btnAdaugaMasina = CreateStyledButton("Adaugă Mașină", Color.FromArgb(46, 204, 113), BtnAdaugaMasina_Click);
+            btnVizualizareMasini = CreateStyledButton("Vizualizează Mașini", Color.FromArgb(52, 152, 219), BtnVizualizareMasini_Click);
+            btnIstoricInchirieri = CreateStyledButton("Istoric Închirieri", Color.FromArgb(155, 89, 182), BtnIstoricInchirieri_Click);
+            btnLogout = CreateStyledButton("Logout", Color.FromArgb(231, 76, 60), BtnLogout_Click);
 
-            // Centrare: adăugăm panouri pentru fiecare buton
-            table.Controls.Add(WrapInPanel(btnAdaugaClient), 0, 0);
-            table.Controls.Add(WrapInPanel(btnVizualizareClienti), 0, 1);
-            table.Controls.Add(WrapInPanel(btnAdaugaMasina), 0, 2);
-            table.Controls.Add(WrapInPanel(btnVizualizareMasini), 0, 3);
+            // Adăugare în layout
+            table.Controls.Add(WrapInPanel(btnVizualizareClienti), 0, 0);
+            table.Controls.Add(WrapInPanel(btnAdaugaMasina), 0, 1);
+            table.Controls.Add(WrapInPanel(btnVizualizareMasini), 0, 2);
+            table.Controls.Add(WrapInPanel(btnIstoricInchirieri), 0, 3);
+            table.Controls.Add(WrapInPanel(btnLogout), 0, 4);
 
             this.Controls.Add(table);
         }
 
-        // Creează un buton stilizat
         private Button CreateStyledButton(string text, Color backColor, EventHandler onClick)
         {
-            Button btn = new Button
+            Button button = new Button
             {
                 Text = text,
                 Width = 250,
                 Height = 50,
                 BackColor = backColor,
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Anchor = AnchorStyles.None,
+                Margin = new Padding(10)
             };
-            btn.Click += onClick;
-            return btn;
+
+            button.Click += onClick; // Attach the event handler here
+            return button;
         }
 
-        // Centrează butonul într-un panou
         private Panel WrapInPanel(Control control)
         {
-            Panel panel = new Panel
-            {
-                Dock = DockStyle.Fill
-            };
+            Panel panel = new Panel { Dock = DockStyle.Fill };
             control.Anchor = AnchorStyles.None;
-            control.Location = new Point((panel.Width - control.Width) / 2, (panel.Height - control.Height) / 2);
             panel.Controls.Add(control);
             panel.Resize += (s, e) =>
             {
                 control.Location = new Point((panel.Width - control.Width) / 2, (panel.Height - control.Height) / 2);
             };
             return panel;
-        }
-
-        // Evenimente click
-        private void BtnAdaugaClient_Click(object sender, EventArgs e)
-        {
-            AdaugareClienti formAdaugare = new AdaugareClienti();
-            formAdaugare.ShowDialog();
         }
 
         private void BtnVizualizareClienti_Click(object sender, EventArgs e)
@@ -107,8 +99,21 @@ namespace InterfataUtilizator_WindowsForms
 
         private void BtnVizualizareMasini_Click(object sender, EventArgs e)
         {
-            VizualizareMasini formVizualizareMasini = new VizualizareMasini();
+            VizualizareMasiniAdmin formVizualizareMasini = new VizualizareMasiniAdmin();
             formVizualizareMasini.ShowDialog();
+        }
+
+        private void BtnIstoricInchirieri_Click(object sender, EventArgs e)
+        {
+            IstoricInchirieri formIstoric = new IstoricInchirieri();
+            formIstoric.ShowDialog();
+        }
+
+        private void BtnLogout_Click(object sender, EventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            this.Close();
         }
     }
 }

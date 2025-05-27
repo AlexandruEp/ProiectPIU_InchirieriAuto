@@ -10,16 +10,15 @@ namespace NivelStocareDate
 {
     public class AdministrareMasini_FisierText
     {
-        private const int NR_MAX_MASINI = 50;
-        private string numeFisier;
+        private readonly string numeFisier;
 
         public AdministrareMasini_FisierText(string numeFisier)
         {
             this.numeFisier = numeFisier;
-            // se incearca deschiderea fisierului in modul OpenOrCreate
             Stream streamFisierText = File.Open(numeFisier, FileMode.OpenOrCreate);
             streamFisierText.Close();
         }
+
         public void AddMasina(Masina masina)
         {
             int idNou = GetUltimulID() + 1;
@@ -30,6 +29,7 @@ namespace NivelStocareDate
                 streamWriter.WriteLine(masina.ConversieLaSir());
             }
         }
+
         public List<Masina> GetMasini()
         {
             List<Masina> masini = new List<Masina>();
@@ -43,58 +43,41 @@ namespace NivelStocareDate
                     linieFisier = linieFisier.Trim();
                     if (string.IsNullOrWhiteSpace(linieFisier)) continue;
 
-                    string[] dateMasina = linieFisier.Split(';');
-                    if (dateMasina.Length >= 5)
+                    try
                     {
-                        try
-                        {
-                            int id = Convert.ToInt32(dateMasina[0]);
-                            Model_masina model = (Model_masina)Enum.Parse(typeof(Model_masina), dateMasina[1]);
-                            Tip_combustibil combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), dateMasina[2]);
-                            int an_fabricatie = Convert.ToInt32(dateMasina[3]);
-                            Culoare_masina culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), dateMasina[4]);
-
-                            Masina masina = new Masina(id, model, combustibil, an_fabricatie, culoare);
-                            masina.IdMasina = id;
-
-                            masini.Add(masina);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Eroare la parsarea liniei: {linieFisier}\n{ex.Message}");
-                        }
+                        Masina masina = new Masina(linieFisier);
+                        masini.Add(masina);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Linie invalidă: {linieFisier}");
+                        Console.WriteLine($"Eroare la parsarea liniei: {linieFisier}\n{ex.Message}");
                     }
                 }
             }
 
             return masini;
         }
+
         public int GetUltimulID()
         {
             List<Masina> masini = GetMasini();
             return masini.Count > 0 ? masini.Max(m => m.IdMasina) : 0;
         }
-        public Masina CautareDupaModel(string nume)
-        {
-            List<Masina> masini = GetMasini();
 
-            foreach (var masina in masini)
-            {
-                if (masina.model.ToString().Equals(nume, StringComparison.OrdinalIgnoreCase))
-                {
-                    return masina;
-                }
-            }
-            return null;
+        public Masina CautareDupaModel(string model)
+        {
+            return GetMasini().FirstOrDefault(m => m.Model.Equals(model, StringComparison.OrdinalIgnoreCase));
         }
 
-
-
-
-
+        public void SalveazaMasini(List<Masina> masini)
+        {
+            using (StreamWriter writer = new StreamWriter(numeFisier, false))
+            {
+                foreach (var m in masini)
+                {
+                    writer.WriteLine(m.ConversieLaSir());
+                }
+            }
+        }
     }
 }

@@ -18,25 +18,28 @@ namespace LibrarieModele
         private const int EMAIL = 2;
         private const int TELEFON = 3;
         private const int CNP_ = 4;
+        private const int PAROLA = 5;
         public int IdClient { get; set; }
         public string nume { get; set; }
         public string email { get; set; }
         public string CNP { get; set; }
         public string telefon { get; set; }
+        public string parola { get; set; }
         
 
         public Client()
         {
-            nume = email = CNP = telefon = string.Empty;
+            nume = email = CNP = telefon = parola = string.Empty;
         }
 
-        public Client(int _idclient, string _nume, string _email, string _CNP, string _telefon)
+        public Client(int _idclient, string _nume, string _email, string _CNP, string _telefon, string _parola)
         {
             IdClient = _idclient;
             nume = _nume;
             email = _email;
             CNP = _CNP;
             telefon = _telefon;
+            parola = _parola;
         }
         public Client(string linieFisier)
         {
@@ -46,6 +49,7 @@ namespace LibrarieModele
                this.email = dateFisier[EMAIL];
                this.telefon = dateFisier[TELEFON];
                this.CNP = dateFisier[CNP_];
+               this.parola = dateFisier.Length > PAROLA ? dateFisier[PAROLA] : "parola123"; // parola default pentru compatibilitate
         
         }
         public string Info()
@@ -59,13 +63,14 @@ namespace LibrarieModele
         }
         public string ConversieLaSir()
         {
-            string obiectClientPentruFisier = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}",
+            string obiectClientPentruFisier = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}",
                 SEPARATOR_AFISARE,
                 IdClient.ToString(),
                 (nume ?? "NECUNOSCUT"),
                 (email ?? "NECUNOSCUT"),
                 (telefon ?? "NECUNOSCUT"),
-                (CNP ?? "NECUNOSCUT"));
+                (CNP ?? "NECUNOSCUT"),
+                (parola ?? "parola123"));
             return obiectClientPentruFisier;
         }
         public void SetID(int id)

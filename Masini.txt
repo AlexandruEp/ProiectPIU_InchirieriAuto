@@ -1,6 +1,15 @@
-1;BMW;Benzina;2001;neagra
-2;Ford;Electric;2015;gri
-3;Mercedes;Benzina;2010;rosie
-4;Ford;Hibrid;2011;albastra
-5;Mercedes;Electric;2012;gri
-6;Opel;Hibrid;2010;alba
+1;Audi;A3;Benzina;Manuala;2016;Gri;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\audi_a3.png;5;110.00;False
+2;Audi;A4;Diesel;Automata;2018;Rosie;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\audi_a4.png;4;130.00;True
+3;Audi;Q3;Benzina;Automata;2020;Gri;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\audi_q3.png;5;150.00;True
+4;BMW;Seria 1;Diesel;Manuala;2017;Alba;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\bmw_series1.png;5;120.00;True
+5;BMW;Seria 3;Benzina;Automata;2019;Albastra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\bmw_series3.png;4;150.00;True
+6;BMW;X1;Diesel;Automata;2020;Gri;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\bmw_x1.png;5;170.00;True
+7;Mercedes;A Class;Benzina;Automata;2019;Alba;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\mercedes_a1.png;5;160.00;True
+8;Mercedes;C Class;Diesel;Automata;2020;Albastra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\mercedes_c.png;4;180.00;True
+9;Mercedes;GLA;Benzina;Automata;2021;Albastra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\mercedes_gla.png;5;200.00;True
+10;Ford;Fiesta;Benzina;Manuala;2017;Alba;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\ford_fiesta.png;5;100.00;True
+11;Ford;Focus;Diesel;Manuala;2018;Albastra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\ford_focus.png;5;115.00;True
+12;Ford;Kuga;Diesel;Automata;2018;Albastra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\ford_kuga.png;5;140.00;True
+13;Opel;Corsa;Benzina;Manuala;2016;Rosie;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\opel_corsa.png;5;90.00;True
+14;Opel;Astra;Diesel;Automata;2019;Rosie;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\opel_astra.png;2;110.00;True
+15;Opel;Grandland;Benzina;Automata;2021;Neagra;C:\Users\alexa\OneDrive\Desktop\Important Folders\PIU\InchirieriAuto\masini\opel_grandlard.png;5;150.00;True

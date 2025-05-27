@@ -15,7 +15,7 @@ namespace InchirieriAuto
             string numeFisierClienti = ConfigurationManager.AppSettings["NumeFisierClienti"];
             string numeFisierMasini = ConfigurationManager.AppSettings["NumeFisierMasini"];
             string locatieFisierSolutie = Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-            string caleCompletaFisierClienti = Path.Combine(locatieFisierSolutie,numeFisierClienti);
+            string caleCompletaFisierClienti = Path.Combine(locatieFisierSolutie, numeFisierClienti);
             string caleCompletaFisierMasini = Path.Combine(locatieFisierSolutie, numeFisierMasini);
 
             AdministrareClienti_FisierText adminClienti = new AdministrareClienti_FisierText(caleCompletaFisierClienti);
@@ -23,9 +23,7 @@ namespace InchirieriAuto
 
             Client clientNou = new Client();
             Masina masinaNoua = new Masina();
-           
-            List<Client> Clienti = adminClienti.GetClienti();
-            int nrClienti = Clienti.Count;
+
             string opt;
 
             do
@@ -42,18 +40,19 @@ namespace InchirieriAuto
                 Console.WriteLine("Y. Afisare date client dupa nume");
                 Console.WriteLine("P. Salvare client");
                 Console.WriteLine("R. Afisare clienti salvati");
-                
+
                 Console.WriteLine("X. Inchidere program");
                 Console.WriteLine();
 
-                Console.WriteLine("Alegeti o optiune: ");
+                Console.Write("Alegeti o optiune: ");
                 opt = Console.ReadLine();
                 Console.Clear();
 
                 switch (opt.ToUpper())
                 {
                     case "C":
-                        masinaNoua = CitireMasinaTastatura(adminMasini);
+                        // Remove the incorrect method call with an argument
+                        masinaNoua = CitireMasinaTastatura();
                         Console.WriteLine();
                         break;
 
@@ -72,7 +71,6 @@ namespace InchirieriAuto
                         break;
                     case "D":
                         clientNou = CitireClientT(adminClienti);
-                       
                         Console.WriteLine();
                         break;
 
@@ -90,7 +88,6 @@ namespace InchirieriAuto
                         break;
 
                     case "R":
-
                         List<Client> clienti = adminClienti.GetClienti();
                         AfisareClienti(clienti);
                         break;
@@ -102,199 +99,117 @@ namespace InchirieriAuto
                         Console.WriteLine("Optiune inexistenta");
                         break;
                 }
-            
-            } while(true);
-        
 
+            } while (true);
         }
 
-        public static Masina CitireMasinaTastatura(AdministrareMasini_FisierText adminMasini)
+        public static Masina CitireMasinaTastatura()
         {
-            Console.WriteLine("Alegeti modelul: ");
-            foreach (var model in Enum.GetValues(typeof(Model_masina)))
-            {
-                Console.WriteLine($"{(int)model}- {model}");
-            }
-            Model_masina modelMasina;
+            Console.WriteLine("Alegeti marca:");
+            foreach (var marca in Enum.GetValues(typeof(MarcaMasina)))
+                Console.WriteLine($"{(int)marca}- {marca}");
+            MarcaMasina marcaSelectata = (MarcaMasina)Enum.Parse(typeof(MarcaMasina), Console.ReadLine());
 
-            while (!Enum.TryParse(Console.ReadLine(), out modelMasina) || !Enum.IsDefined(typeof(Model_masina), modelMasina))
-            {
-                Console.WriteLine("Valoare invalida! Alegeti din lista:");
-            }
+            Console.Write("Model: ");
+            string model = Console.ReadLine();
 
-            Console.WriteLine("Alegeti tipul combustibilului: ");
+            Console.WriteLine("Alegeti combustibilul:");
             foreach (var combustibil in Enum.GetValues(typeof(Tip_combustibil)))
-            {
                 Console.WriteLine($"{(int)combustibil}- {combustibil}");
-            }
-            Tip_combustibil tip_Combustibil;
-            while (!Enum.TryParse(Console.ReadLine(), out tip_Combustibil) || !Enum.IsDefined(typeof(Tip_combustibil), tip_Combustibil))
-            {
-                Console.WriteLine("Valoare invalida! Alegeti din lista:");
-            }
+            Tip_combustibil tipCombustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), Console.ReadLine());
 
-            Console.WriteLine("Introduceti anul fabricatiei: ");
-            int anFabricatie;
-            while (!int.TryParse(Console.ReadLine(), out anFabricatie))
-            {
-                Console.WriteLine("Anul trebuie sa fie un numar! Introduceti din nou: ");
-            }
+            Console.WriteLine("Alegeti transmisia:");
+            foreach (var tr in Enum.GetValues(typeof(TipTransmisie)))
+                Console.WriteLine($"{(int)tr}- {tr}");
+            TipTransmisie transmisie = (TipTransmisie)Enum.Parse(typeof(TipTransmisie), Console.ReadLine());
 
-            Console.WriteLine("Alegeti culoarea: ");
-            foreach (var culoare in Enum.GetValues(typeof(Culoare_masina)))
-            {
-                Console.WriteLine($"{(int)culoare}- {culoare}");
-            }
-            Culoare_masina culoareMasina;
-            while (!Enum.TryParse(Console.ReadLine(), out culoareMasina) || !Enum.IsDefined(typeof(Culoare_masina), culoareMasina))
-            {
-                Console.WriteLine("Valoare invalida! Alegeti din lista:");
-            }
+            Console.Write("An fabricatie: ");
+            int an = int.Parse(Console.ReadLine());
 
-            // Generate a new ID for the car
-            List<Masina> masiniExistente = adminMasini.GetMasini();
-            int idNou = masiniExistente.Count > 0
-                ? masiniExistente.Max(m => m.IdMasina) + 1
-                : 1;
+            Console.WriteLine("Alegeti culoarea:");
+            foreach (var c in Enum.GetValues(typeof(Culoare_masina)))
+                Console.WriteLine($"{(int)c}- {c}");
+            Culoare_masina culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), Console.ReadLine());
 
-            return new Masina()
+            Console.Write("Numar usi: ");
+            int usi = int.Parse(Console.ReadLine());
+
+            Console.Write("Pret pe zi: ");
+            double pret = double.Parse(Console.ReadLine());
+
+            return new Masina
             {
-                IdMasina = idNou,
-                model = modelMasina,
-                combustibil = tip_Combustibil,
-                an_fabricatie = anFabricatie,
-                culoare = culoareMasina
+                Marca = marcaSelectata,
+                Model = model,
+                Combustibil = tipCombustibil,
+                Transmisie = transmisie,
+                AnFabricatie = an,
+                Culoare = culoare,
+                NrUsi = usi,
+                Pret = pret
             };
         }
 
-        public static string AfisareMasina(Masina masina)
+        public static string AfisareMasina(Masina m)
         {
-            string informatii_masina = string.Format("{0}. Masina {1}\n" +
-                "Motorizare: {2}\n" +
-                "Fabricata in {3}\n" +
-                "De culoare {4}",
-                masina.IdMasina,
-                masina.model.ToString(),
-                masina.combustibil.ToString(),
-                masina.an_fabricatie,
-                masina.culoare.ToString());
-
-            return informatii_masina;
+            return $"ID: {m.IdMasina}\nMarca: {m.Marca}\nModel: {m.Model}\nCombustibil: {m.Combustibil}\nTransmisie: {m.Transmisie}\nAn: {m.AnFabricatie}\nCuloare: {m.Culoare}\nUsi: {m.NrUsi}\nPret: {m.Pret} lei/zi";
         }
 
-        public static void AfisareMasiniFisier(AdministrareMasini_FisierText administrareMasini_FisierText)
+        public static void AfisareMasiniFisier(AdministrareMasini_FisierText admin)
         {
-            List<Masina> masini = administrareMasini_FisierText.GetMasini();
-            int nrMasini = masini.Count; // Added this line to define nrMasini
-            if (nrMasini == 0)
-            {
-                Console.WriteLine("Nu sunt masini salvate");
-            }
+            List<Masina> masini = admin.GetMasini();
+            if (masini.Count == 0)
+                Console.WriteLine("Nu sunt masini salvate.");
             else
-            {
-                Console.WriteLine("\nMasinile salvate sunt: ");
-                for (int i = 0; i < nrMasini; i++)
-                {
-                    string infoMasina = AfisareMasina(masini[i]);
-                    Console.WriteLine(infoMasina);
-                }
-            }
+                masini.ForEach(m => Console.WriteLine(AfisareMasina(m) + "\n"));
         }
+
         public static void IdentificareDupaModel(AdministrareMasini_FisierText adminMasini)
         {
             Console.WriteLine("Introduceti modelul");
-            string numeM = Console.ReadLine();
-            Masina masinaGasitNume = adminMasini.CautareDupaModel(numeM);
-            if (masinaGasitNume != null)
-            {
-                Console.WriteLine($"Masina: {masinaGasitNume.model},motorizare: {masinaGasitNume.combustibil}," +
-                    $"fabricata in {masinaGasitNume.an_fabricatie}, de culoare {masinaGasitNume.culoare}");
-                Console.WriteLine();
-            }
+            string model = Console.ReadLine();
+            Masina masina = adminMasini.CautareDupaModel(model);
+            if (masina != null)
+                Console.WriteLine(AfisareMasina(masina));
             else
-            {
-                Console.WriteLine("Modelul introdus nu corespunde");
-            }
+                Console.WriteLine("Modelul nu a fost gasit.");
         }
+
         public static Client CitireClientT(AdministrareClienti_FisierText adminClienti)
         {
-            Console.WriteLine("Introduceti numele: ");
+            Console.Write("Nume: ");
             string nume = Console.ReadLine();
-            Console.WriteLine();
-
-            Console.WriteLine("Introduceti email-ul: ");
+            Console.Write("Email: ");
             string email = Console.ReadLine();
-            Console.WriteLine();
-
-            Console.WriteLine("Introduceti numarul de telefon: ");
+            Console.Write("Telefon: ");
             string telefon = Console.ReadLine();
+            Console.Write("CNP: ");
+            string cnp = Console.ReadLine();
+            string parola = "parola123"; // Parola default, poate fi schimbata ulterior
 
-            while (telefon.Length != 10)
-            {
-                Console.WriteLine("Numar de telefon invalid. Reintroduceti: ");
-                telefon = Console.ReadLine();
-            }
-            Console.WriteLine("Introduceti CNP-ul: ");
-            string CNP = Console.ReadLine();
-
-            while (CNP.Length != 13)
-            {
-                Console.WriteLine("CNP invalid. Reintroduceti: ");
-                CNP = Console.ReadLine();
-            }
-            Console.WriteLine();
-
-            // 2. Obții lista de clienți existenți
-            List<Client> clientiExistenti = adminClienti.GetClienti();
-
-            // 3. Calculezi următorul ID disponibil
-            int idNou = clientiExistenti.Count > 0
-                ? clientiExistenti.Max(c => c.IdClient) + 1
-                : 1;
-
-            // 4. Creezi un nou client cu ID-ul calculat
-            Client clientNou = new Client
-            {
-                IdClient = idNou,
-                nume = nume,
-                email = email,
-                CNP = CNP,
-                telefon = telefon
-            };
-
-            // 5. Returnezi clientul complet
-            return clientNou;
+            int idNou = adminClienti.GetClienti().Count + 1;
+            return new Client(idNou, nume, email, cnp, telefon, parola);
         }
 
         public static void AfisareClient(Client client)
         {
             Console.WriteLine(client.Info());
         }
+
         public static void AfisareClienti(List<Client> clienti)
         {
-            foreach (var client in clienti)
-            {
-                if (client != null)
-                {
-                    AfisareClient(client);
-                    Console.WriteLine();
-                }
-            }
+            clienti.ForEach(c => Console.WriteLine(c.Info() + "\n"));
         }
+
         public static void IdentificareDupaNume(AdministrareClienti_FisierText adminClient)
         {
-            Console.WriteLine("Introduceti numele");
-            string numeC = Console.ReadLine();
-            Client clientGasitNume = adminClient.CautareDupaNume(numeC);
-            if (clientGasitNume != null)
-            {
-                Console.WriteLine($"Clientul {clientGasitNume.nume} are numarul de telefon {clientGasitNume.telefon}");
-            }
+            Console.Write("Introduceti numele: ");
+            string nume = Console.ReadLine();
+            Client client = adminClient.CautareDupaNume(nume);
+            if (client != null)
+                Console.WriteLine(client.Info());
             else
-            {
-                Console.WriteLine("Numele introdus nu corespunde");
-            }
+                Console.WriteLine("Clientul nu a fost gasit.");
         }
-    
     }
 }

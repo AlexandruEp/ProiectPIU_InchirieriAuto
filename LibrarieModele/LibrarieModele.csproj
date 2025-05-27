@@ -44,6 +44,7 @@
     <Compile Include="Clasa_Client.cs" />
     <Compile Include="Clasa_masina.cs" />
     <Compile Include="Enumerare_masina.cs" />
+    <Compile Include="Inchiriere.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

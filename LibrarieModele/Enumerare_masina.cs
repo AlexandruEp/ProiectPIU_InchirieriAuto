@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LibrarieModele
 {
 
-    public enum Model_masina
+    public enum MarcaMasina
     {
         None= 0,
         BMW = 1,
@@ -30,10 +30,17 @@ namespace LibrarieModele
     public enum Culoare_masina
     {
         None = 0,
-        alba = 1,
-        neagra = 2,
-        rosie = 3,
-        albastra = 4,
-        gri = 5
+        Alba = 1,
+        Neagra = 2,
+        Rosie = 3,
+        Albastra = 4,
+        Gri = 5
+    };
+
+    public enum TipTransmisie
+    {
+        None = 0,
+        Manuala = 1,
+        Automata = 2
     };
 }

@@ -1,67 +1,116 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LibrarieModele
 {
-   public class Masina
+    public class Masina
     {
- 
-           public int IdMasina { get; set; }
-           public Model_masina model { get; set; }
-           public Tip_combustibil combustibil { get; set; }
-           public int an_fabricatie { get; set; }
-           public Culoare_masina culoare { get; set; }
+        public int IdMasina { get; set; }
+        public MarcaMasina Marca { get; set; }
+        public string Model { get; set; }
+        public Tip_combustibil Combustibil { get; set; }
+        public TipTransmisie Transmisie { get; set; }
+        public int AnFabricatie { get; set; }
+        public Culoare_masina Culoare { get; set; }
+        public string ImagePath { get; set; }
+        public int NrUsi { get; set; }
+        public double Pret { get; set; }
+        public bool Disponibil { get; set; } = true; // Adăugat pentru a marca disponibilitatea mașinii
 
-            private const char SEPARATOR_PRINCIPAL_FISIER = ';';
-            private const int ID = 0;
-            private const int MODEL = 1;
-            private const int COMBUSTIBIL = 2;
-            private const int AN_FABRICATIE = 3;
-            private const int CULOARE = 4;
+        private const char SEPARATOR_PRINCIPAL_FISIER = ';';
+
+        // Indici pentru parsare din fișier
+        private const int ID = 0;
+        private const int MARCA = 1;
+        private const int MODEL = 2;
+        private const int COMBUSTIBIL = 3;
+        private const int TRANSMISIE = 4;
+        private const int AN = 5;
+        private const int CULOARE = 6;
+        private const int IMAGINE = 7;
+        private const int NR_USI = 8;
+        private const int PRET = 9;
 
         public Masina()
         {
-            
-            model = Model_masina.None;
-            combustibil = Tip_combustibil.None;
-            an_fabricatie = 0;
-            culoare = Culoare_masina.None;
+            Marca = MarcaMasina.None;
+            Model = string.Empty;
+            Combustibil = Tip_combustibil.None;
+            Transmisie = TipTransmisie.Manuala;
+            AnFabricatie = 0;
+            Culoare = Culoare_masina.None;
+            ImagePath = string.Empty;
+            NrUsi = 0;
+            Pret = 0.0;
         }
 
-        public Masina(int _idMasina, Model_masina model, Tip_combustibil tip_combustibil, int an_fabricatie, Culoare_masina culoare)
+        public Masina(int id, MarcaMasina marca, string model, Tip_combustibil combustibil, TipTransmisie transmisie,
+                      int an, Culoare_masina culoare, string imagePath, int nrUsi, double pret)
         {
-            IdMasina = _idMasina;
-            this.model = model;
-            this.combustibil = tip_combustibil;
-            this.an_fabricatie = an_fabricatie;
-            this.culoare = culoare;
-        }
-        public Masina(string liniefisier)
-        {
-            string[] dateFisier = liniefisier.Split(SEPARATOR_PRINCIPAL_FISIER);
-            this.IdMasina = Convert.ToInt32(dateFisier[ID]);
-            this.model = (Model_masina)Enum.Parse(typeof(Model_masina), dateFisier[MODEL]);
-            this.combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), dateFisier[COMBUSTIBIL]);
-            this.an_fabricatie = Convert.ToInt32(dateFisier[AN_FABRICATIE]);
-            this.culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), dateFisier[CULOARE]);
+            IdMasina = id;
+            Marca = marca;
+            Model = model;
+            Combustibil = combustibil;
+            Transmisie = transmisie;
+            AnFabricatie = an;
+            Culoare = culoare;
+            ImagePath = imagePath;
+            NrUsi = nrUsi;
+            Pret = pret;
         }
 
-            public string Info()
+        public Masina(string linieFisier)
+        {
+            string[] date = linieFisier.Split(SEPARATOR_PRINCIPAL_FISIER);
+
+            IdMasina = int.Parse(date[ID]);
+            Marca = (MarcaMasina)Enum.Parse(typeof(MarcaMasina), date[MARCA]);
+            Model = date[MODEL];
+            Combustibil = (Tip_combustibil)Enum.Parse(typeof(Tip_combustibil), date[COMBUSTIBIL]);
+            Transmisie = (TipTransmisie)Enum.Parse(typeof(TipTransmisie), date[TRANSMISIE]);
+            AnFabricatie = int.Parse(date[AN]);
+            Culoare = (Culoare_masina)Enum.Parse(typeof(Culoare_masina), date[CULOARE]);
+            ImagePath = date[IMAGINE];
+            NrUsi = int.Parse(date[NR_USI]);
+            Pret = double.Parse(date[PRET]);
+            if (date.Length > 10)
             {
-                return $"ID: {IdMasina}\n"+
-                    $"Model: {model}\n" +
-                    $"Motorizare: {combustibil}\n" +
-                    $"An fabricatie: {an_fabricatie}\n" +
-                    $"Culoare: {culoare}";
+                Disponibil = bool.Parse(date[10]);
             }
+            else
+            {
+                Disponibil = true; // Dacă nu este specificat, presupunem că mașina este disponibilă
+            }
+        }
+
         public string ConversieLaSir()
         {
-            string masinaPentruFisier = string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}",
-                SEPARATOR_PRINCIPAL_FISIER, IdMasina, model, combustibil, an_fabricatie, culoare);
-            return masinaPentruFisier;
+            return string.Join(SEPARATOR_PRINCIPAL_FISIER.ToString(), new string[]
+            {
+                IdMasina.ToString(),
+                Marca.ToString(),
+                Model,
+                Combustibil.ToString(),
+                Transmisie.ToString(),
+                AnFabricatie.ToString(),
+                Culoare.ToString(),
+                ImagePath,
+                NrUsi.ToString(),
+                Pret.ToString("F2"),
+                Disponibil.ToString()
+            });
+        }
+
+        public string Info()
+        {
+            return $"ID: {IdMasina}\n" +
+                   $"Marca: {Marca}\n" +
+                   $"Model: {Model}\n" +
+                   $"Combustibil: {Combustibil}\n" +
+                   $"Transmisie: {Transmisie}\n" +
+                   $"An: {AnFabricatie}\n" +
+                   $"Culoare: {Culoare}\n" +
+                   $"Uși: {NrUsi}\n" +
+                   $"Preț/zi: {Pret:F2} lei";
         }
 
         public void SetID(int id)
@@ -70,4 +119,3 @@ namespace LibrarieModele
         }
     }
 }
-
